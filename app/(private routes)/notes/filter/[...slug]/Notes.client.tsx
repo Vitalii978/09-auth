@@ -4,18 +4,18 @@ import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
 // import Modal from "@/components/Modal/Modal";
 // import NoteForm from "@/components/NoteForm/NoteForm";
+import { useRouter } from "next/navigation";
 import {useQuery, keepPreviousData} from "@tanstack/react-query";
 import {useDebouncedCallback} from "use-debounce";
-import {fetchNotes, type NoteResponse } from "@/lib/api";
+import {fetchNotes, type NoteResponse } from "@/lib/api/clientApi";
 import {useState} from "react";
 import css from "./NotesPage.module.css";
-import { useRouter } from "next/navigation";
 
 type NoteListClientProps = {
   tag?: string;
 };
 
-const NoteListClient= ({ tag }: NoteListClientProps) => {
+const NoteListClient = ({ tag }: NoteListClientProps) => {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -24,8 +24,8 @@ const NoteListClient= ({ tag }: NoteListClientProps) => {
   // const openModal = () => setModalOpen(true);
   // const closeModal = () => setModalOpen(false);
   const debouncedSetQuery = useDebouncedCallback((value: string) => {
-  setDebouncedQuery(value);
-}, 300);
+    setDebouncedQuery(value);
+  }, 300);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     setPage(1);
@@ -38,11 +38,12 @@ const NoteListClient= ({ tag }: NoteListClientProps) => {
     refetchOnMount: false,
   });
 
-
+  // if (error) throw error;
+  // if (!data?.notes) throw new Error('Could not fetch the list of notes.');
 
   const totalPages = data?.totalPages || 0;
   return (
-    <>
+    <div className={css.app}>
       <header className={css.toolbar}>
           <SearchBox searchQuery={query} onUpdate={handleInputChange}/>
           {totalPages> 1 && <Pagination totalPages={totalPages} page={page} setPage={setPage}/>}
@@ -52,7 +53,7 @@ const NoteListClient= ({ tag }: NoteListClientProps) => {
         <NoteForm onClose={closeModal}/>
       </Modal>} */}
       {data?.notes && <NoteList notes={data?.notes}/>}
-    </>
+    </div>
   );
 }
 
