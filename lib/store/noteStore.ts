@@ -2,7 +2,7 @@ import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 import { CreateNoteParams } from '../api/clientApi';
 
-type NoteDraftStore = {
+type NoteDraft = {
     draft: CreateNoteParams;
     setDraft: (draft: CreateNoteParams) => void;
     clearDraft: () => void;
@@ -14,7 +14,7 @@ const initialDraft: CreateNoteParams = {
     tag: "Todo",
 };
 
-export const useNoteDraftStore = create<NoteDraftStore>()(persist(
+export const useNoteDraft = create<NoteDraft>()(persist(
     (set) => ({
         draft: initialDraft,
         setDraft: (draft) => set({ draft }),
