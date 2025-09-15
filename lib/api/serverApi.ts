@@ -1,15 +1,13 @@
-// serverApi.ts
+
 import { cookies } from "next/headers";
 import { nextServer } from "./api";
 import type { Note } from '@/types/note';
 import type { User } from "@/types/user";
 import type { NoteResponse } from "./clientApi";
 
-/**
- * Проверяет текущую серверную сессию через refreshToken / accessToken
- */
+
 export const checkServerSession = async () => {
-  const cookieStore = await cookies(); // ❗ await для server components
+  const cookieStore = await cookies(); 
   const accessToken = cookieStore.get('accessToken')?.value;
   const refreshToken = cookieStore.get('refreshToken')?.value;
 
@@ -27,9 +25,7 @@ export const checkServerSession = async () => {
   return res;
 };
 
-/**
- * Получение данных текущего пользователя
- */
+
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
@@ -49,9 +45,7 @@ export const getServerMe = async (): Promise<User> => {
   return res.data;
 };
 
-/**
- * Получение списка заметок с фильтрацией и пагинацией
- */
+
 export const fetchServerNotes = async (page: number, query: string, tag?: string): Promise<NoteResponse> => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
@@ -79,9 +73,7 @@ export const fetchServerNotes = async (page: number, query: string, tag?: string
   return response.data;
 };
 
-/**
- * Получение заметки по ID
- */
+
 export const fetchServerNoteById = async (id: string): Promise<Note> => {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
