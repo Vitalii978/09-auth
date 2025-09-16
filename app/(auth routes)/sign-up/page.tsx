@@ -1,3 +1,4 @@
+
 'use client'
 
 import css from './SignUpPage.module.css'

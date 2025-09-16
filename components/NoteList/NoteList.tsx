@@ -1,4 +1,3 @@
-
 import css from './NoteList.module.css'
 import type {Note} from '../../types/note';
 import { deleteNote } from '@/lib/api/clientApi';
@@ -24,6 +23,7 @@ export default function NoteList({notes}: NoteListProps) {
 
     return (
         <ul className={css.list}>
+	{/*Набір елементів списку нотатків*/}
   {notes.map(note => (<li key={note.id} className={css.listItem}>
     <h2 className={css.title}>{note.title}</h2>
     <p className={css.content}>{note.content}</p>

@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: row;
   height: 100vh;
+  min-height: 0;
+  flex: 1;
 }
 
 .sidebar {
@@ -11,10 +13,13 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   border-right: 1px solid #ddd;
+  align-self: stretch;
+
 }
 
 .notesWrapper {
   width: 100%;
+  flex: 1;
 }

@@ -1,18 +1,17 @@
 'use client'
-
 import css from './NoteForm.module.css';
+// import {Formik, Form, ErrorMessage, Field} from 'formik';
+// import * as Yup from 'yup';
 import {createNote, type CreateNoteParams } from '@/lib/api/clientApi';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useNoteDraft } from '@/lib/store/noteStore';
-
+import { useNoteDraftStore } from '@/lib/store/noteStore';
 
 
 export default function NoteForm() {
-    const router = useRouter();
-    const {draft,setDraft,clearDraft} = useNoteDraft();
+  const router = useRouter();
+  const {draft,setDraft,clearDraft} = useNoteDraftStore();
     const client = useQueryClient();
-    
     const handleChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -23,16 +22,15 @@ export default function NoteForm() {
       [event.target.name]: event.target.value,
     });
   };
-
     const createNoteMutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
-      clearDraft()
+      clearDraft();
       client.invalidateQueries({ queryKey: ['notes'] });
       router.back();
     },
   })
-       const createNewNote = (formData: FormData) => {
+    const createNewNote = (formData: FormData) => {
       const newNote: CreateNoteParams = {
         title: String(formData.get('title') ?? ''),
         content: String(formData.get('content') ?? ''),
@@ -40,15 +38,24 @@ export default function NoteForm() {
       };
     createNoteMutation.mutate(newNote);
 }
-
+    // const NoteValidation = Yup.object().shape({
+    //     title: Yup.string()
+    //     .required('Title is required')
+    //     .min(3, 'Title must be at least 3 characters long')
+    //     .max(50, 'Title must not exceed 50 characters'),
+    //     content: Yup.string()
+    //     .max(500, 'Content text is too long'),
+    //     tag: Yup.string()
+    //     .oneOf(['Todo', 'Work', "Personal", 'Meeting', 'Shopping'], 'Tag is invalid')
+    //     .required('Tag is required'),
+    // })
     return (
-    
         <form className={css.form} action={createNewNote}>
             <div className={css.formGroup}>
               <label htmlFor="title">Title</label>
               <input id="title" type="text" name="title" className={css.input}
               value={draft?.title} onChange={handleChange}/>
-                  
+              {/* <ErrorMessage component="span" name="title" className={css.error} /> */}
             </div>
 
             <div className={css.formGroup}>
@@ -62,7 +69,7 @@ export default function NoteForm() {
                 onChange={handleChange}
                 required
               />
-              
+              {/* <ErrorMessage component="span" name="content" className={css.error} /> */}
             </div>
 
             <div className={css.formGroup}>
@@ -74,7 +81,7 @@ export default function NoteForm() {
                 <option value="Meeting">Meeting</option>
                 <option value="Shopping">Shopping</option>
               </select>
-             
+             {/* <ErrorMessage component="span" name="tag" className={css.error} /> */}
             </div>
 
             <div className={css.actions}>
